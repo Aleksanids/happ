@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+  <title>Стриж · Dots — открыть в Happ</title>
+  <style>
+    :root{color-scheme:dark;font-family:system-ui,sans-serif;background:#111522;color:#f0f3ff}
+    body{margin:0;min-height:100svh;display:grid;place-items:center}
+    main{width:min(32rem,calc(100% - 3rem));padding:2rem 0}
+    .brand{color:#aebcff;letter-spacing:.15em;font-size:.8rem;font-weight:700}
+    h1{font-size:clamp(1.8rem,6vw,2.6rem);line-height:1.15;margin:.8rem 0 1rem}
+    p{line-height:1.65;color:#bfc8e1} .actions{display:grid;gap:.8rem;margin:1.6rem 0}
+    a{color:inherit} .action{display:block;text-align:center;text-decoration:none;border-radius:.8rem;padding:1rem;background:#6b66f4;color:white;font-weight:700;border:1px solid #9793ff}
+    .action:focus-visible{outline:3px solid #e4c96d;outline-offset:4px}
+    small{display:block;color:#9daac8;line-height:1.6} #status{min-height:3.3em}
+  </style>
+</head>
+<body>
+<main>
+  <div class="brand">СТРИЖ · VPN</div>
+  <h1>Открываем «Стриж · Dots»</h1>
+  <p id="status" role="status">Передаём подписку в Happ. Подтвердите открытие приложения, если браузер попросит.</p>
+  <div class="actions">
+    <a class="action" id="open-happ" href="happ://add/https://raw.githubusercontent.com/Aleksanids/happ/main/dots.txt">Открыть «Стриж · Dots» в Happ</a>
+  </div>
+  <small>Если автоматический переход не сработал, нажмите кнопку выше. Если браузер предложит открыть Happ, разрешите переход.</small>
+  <p><small>Happ должен быть установлен на этом устройстве. <a href="https://www.happ.su/" rel="noopener noreferrer">Официальный сайт Happ</a></small></p>
+  <small>Если подписка уже добавлена, её можно обновить в Happ без повторного импорта.</small>
+</main>
+<script>
+(() => {
+  'use strict';
+  const uri = 'happ://add/https://raw.githubusercontent.com/Aleksanids/happ/main/dots.txt';
+  try { window.location.assign(uri); }
+  catch (_) { document.getElementById('status').textContent = 'Нажмите кнопку выше, чтобы открыть подписку в Happ.'; }
+})();
+</script>
+</body>
+</html>
