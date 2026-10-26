@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
-  <title>Стриж — открыть в Happ</title>
+  <title>Стриж — добавить в Happ</title>
   <style>
     :root{color-scheme:dark;font-family:system-ui,sans-serif;background:#111522;color:#f0f3ff}
     body{margin:0;min-height:100svh;display:grid;place-items:center}
@@ -16,26 +16,56 @@
     a{color:inherit} .action{display:block;text-align:center;text-decoration:none;border-radius:.8rem;padding:1rem;background:#6b66f4;color:white;font-weight:700;border:1px solid #9793ff}
     .action:focus-visible{outline:3px solid #e4c96d;outline-offset:4px}
     small{display:block;color:#9daac8;line-height:1.6} #status{min-height:3.3em}
+  
+    button,input{font:inherit;box-sizing:border-box}
+    button{cursor:pointer} button:disabled{cursor:wait;opacity:.7}
+    .secondary{background:#222941;border-color:#46516f;width:100%;margin-top:.8rem}
+    details{margin:1.5rem 0} summary{cursor:pointer;color:#dce3ff}
+    input{width:100%;padding:.8rem;background:#111522;color:#dce3ff;border:1px solid #46516f;border-radius:.5rem}
+    input:focus-visible,summary:focus-visible{outline:3px solid #e4c96d;outline-offset:4px}
+    #copy-status{min-height:3.3em}
   </style>
 </head>
 <body>
 <main>
   <div class="brand">СТРИЖ · VPN</div>
-  <h1>Открываем «Стриж»</h1>
-  <p id="status" role="status">Передаём подписку в Happ. Подтвердите открытие приложения, если браузер попросит.</p>
+  <h1>Добавить «Стриж» в Happ</h1>
+  <p>Нажмите кнопку ниже и подтвердите открытие Happ. Приложение должно быть установлено на этом устройстве.</p>
   <div class="actions">
-    <a class="action" id="open-happ" href="happ://add/https://raw.githubusercontent.com/Aleksanids/happ/main/speed.txt">Открыть «Стриж» в Happ</a>
+    <a class="action" id="open-happ" href="happ://add/https://raw.githubusercontent.com/Aleksanids/happ/main/speed.txt">Добавить «Стриж» в Happ</a>
   </div>
-  <small>Если автоматический переход не сработал, нажмите кнопку выше. Если браузер предложит открыть Happ, разрешите переход.</small>
-  <p><small>Happ должен быть установлен на этом устройстве. <a href="https://www.happ.su/" rel="noopener noreferrer">Официальный сайт Happ</a></small></p>
-  <small>Если подписка уже добавлена, её можно обновить в Happ без повторного импорта.</small>
+  <details>
+    <summary>Если Happ не открылся</summary>
+    <p>Во встроенном браузере мессенджера откройте эту страницу в обычном браузере и нажмите кнопку снова.</p>
+    <p>Можно добавить подписку вручную: скопируйте ссылку ниже, затем в Happ нажмите «+» и вставьте её.</p>
+    <input id="subscription-url" type="text" readonly aria-label="Ссылка подписки Стриж" value="https://raw.githubusercontent.com/Aleksanids/happ/main/speed.txt">
+    <button class="action secondary" id="copy-link" type="button">Скопировать ссылку</button>
+    <p id="copy-status" role="status" aria-live="polite"></p>
+    <noscript><p>Выделите ссылку выше и скопируйте её вручную.</p></noscript>
+  </details>
+  <small>Happ может показать адрес сайта вместо имени. В меню карточки подписки измените название на «Стриж».</small>
+  <p><small>Если подписка уже добавлена, обновите её в Happ без повторного импорта.</small></p>
+  <small><a href="https://www.happ.su/" rel="noopener noreferrer">Официальный сайт Happ</a></small>
 </main>
 <script>
 (() => {
   'use strict';
-  const uri = 'happ://add/https://raw.githubusercontent.com/Aleksanids/happ/main/speed.txt';
-  try { window.location.assign(uri); }
-  catch (_) { document.getElementById('status').textContent = 'Нажмите кнопку выше, чтобы открыть подписку в Happ.'; }
+  const rawURL = 'https://raw.githubusercontent.com/Aleksanids/happ/main/speed.txt';
+  const copyButton = document.getElementById('copy-link');
+  const copyStatus = document.getElementById('copy-status');
+  copyButton.addEventListener('click', async () => {
+    copyButton.disabled = true;
+    copyStatus.textContent = '';
+    try {
+      if (!navigator.clipboard || typeof navigator.clipboard.writeText !== 'function') throw new Error('Clipboard unavailable');
+      await navigator.clipboard.writeText(rawURL);
+      copyStatus.textContent = 'Ссылка скопирована. В Happ нажмите «+» и вставьте её.';
+    } catch (_) {
+      copyStatus.textContent = 'Не удалось скопировать. Выделите ссылку выше и скопируйте её вручную.';
+    } finally {
+      copyButton.disabled = false;
+    }
+  });
 })();
 </script>
 </body>
