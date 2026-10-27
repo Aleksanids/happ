@@ -1,0 +1,48 @@
+[
+  {
+    "remarks": "🧪 Стриж — безопасный тест обновления (без VPN)",
+    "log": {
+      "loglevel": "warning"
+    },
+    "inbounds": [],
+    "outbounds": [
+      {
+        "protocol": "vless",
+        "tag": "test-proxy",
+        "settings": {
+          "vnext": [
+            {
+              "address": "192.0.2.1",
+              "port": 443,
+              "users": [
+                {
+                  "id": "00000000-0000-4000-8000-000000000001",
+                  "encryption": "none"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "security": "none"
+        }
+      },
+      {
+        "protocol": "blackhole",
+        "tag": "block",
+        "settings": {}
+      }
+    ],
+    "routing": {
+      "domainStrategy": "AsIs",
+      "rules": [
+        {
+          "type": "field",
+          "network": "tcp,udp",
+          "outboundTag": "test-proxy"
+        }
+      ]
+    }
+  }
+]
